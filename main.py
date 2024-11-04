@@ -10,7 +10,7 @@ def main():
     parser = PoseParser()
 
     # Load output JSON files from OpenPose
-    parser.load_json("pose_json_data1")
+    parser.load_json("pose_json_data2")
 
     # Define specific triplets of joints for angle calculation
     joint_triplets = [
