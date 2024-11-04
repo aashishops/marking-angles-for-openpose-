@@ -138,3 +138,27 @@ class PoseParser:
         confidence = keypoints[(joint * KEYPOINT_LENGTH) + CONF_SPACING]
 
         return x, y, confidence
+    def get_keypoints(self):
+        """
+        Returns a list of dictionaries where each dictionary contains joint coordinates for each frame.
+        Each frame dictionary has joint names as keys and (x, y, confidence) as values.
+        """
+        keypoints_per_frame = []
+        
+        # Check if data is loaded as a directory (multiple frames)
+        if self._is_dir:
+            for frame_data in self._data:
+                frame_keypoints = {}
+                for joint in Body25Joints:
+                    x, y, conf = self._parse_pose_frame(joint, 0, frame_num=self._data.index(frame_data))
+                    frame_keypoints[joint] = (x, y, conf)
+                keypoints_per_frame.append(frame_keypoints)
+        else:
+            # Handle single image data
+            frame_keypoints = {}
+            for joint in Body25Joints:
+                x, y, conf = self._parse_pose_frame(joint, 0)
+                frame_keypoints[joint] = (x, y, conf)
+            keypoints_per_frame.append(frame_keypoints)
+
+        return keypoints_per_frame
